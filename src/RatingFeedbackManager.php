@@ -6,10 +6,14 @@ class RatingFeedbackManager extends ModelAdmin {
 		'RatingFeedback'
 	];
 
-	private static $menu_title = 'Rating Manager';
+	private static $menu_title = 'Feedback Manager';
 
 	private static $url_segment = 'rating';
 	
+	private static $menu_priority = -8;
+
+	private static $menu_icon = 'framework/admin/images/menu-icons/16x16/blog.png';
+
 	public function getEditForm($id = null, $fields = null) 
 	{
 		$form = parent::getEditForm($id , $fields);

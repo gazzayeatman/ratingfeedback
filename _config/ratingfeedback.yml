@@ -16,3 +16,11 @@ SiteTree:
 ContentController:
   extensions:
     - Controller_HandleRatingFeedback
+
+RatingFeedbackManager:
+  extensions:
+    - SubsiteAdminExtension
+
+RatingFeedback:
+  extensions:
+    - SubsiteModelExtension
