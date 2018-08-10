@@ -14,6 +14,6 @@
 		"silverstripe/framework": "~3.2"
 	},
 	"suggests": {
-		"dnadesign/gridfield-bulk-delete": "Allows for bulk deletion of feedback submissions",
+		"dnadesign/gridfield-bulk-delete": "Allows for bulk deletion of feedback submissions"
 	}
 }
