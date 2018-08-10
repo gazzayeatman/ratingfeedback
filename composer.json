@@ -1,0 +1,19 @@
+{
+	"name": "dnadesign/ratingfeedback",
+	"type": "silverstripe-module",
+	"description": "Display a feedback form on any page",
+	"license": "BSD-3-Clause",
+	"keywords": ["silverstripe", "cms", "feedback", "rating", "stars"],
+	"authors": [
+		{
+			"name": "DNA Design",
+			"email": "dev@dna.co.nz"
+		}
+	],
+	"require": {
+		"silverstripe/framework": "~3.2"
+	},
+	"suggests": {
+		"dnadesign/gridfield-bulk-delete": "Allows for bulk deletion of feedback submissions",
+	}
+}

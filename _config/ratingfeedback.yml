@@ -1,0 +1,18 @@
+---
+Name: ratingfeedbacconfig
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
+
+SiteConfig:
+  extensions:
+    - SiteConfig_RatingFeedbackOptions
+
+SiteTree:
+  extensions:
+    - SiteTree_EnableRatingFeedback
+
+ContentController:
+  extensions:
+    - Controller_HandleRatingFeedback
