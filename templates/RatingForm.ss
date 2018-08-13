@@ -14,17 +14,30 @@
 
 		<div class="rating-intro <% if $Submitted %>rating-intro--success<% end_if %>">$Intro</div>
 
-		<div class="rating-stars">
-			$Fields.fieldByName('Rating').FieldHolder
-		</div>
+		<% if $IncludeRating %>
+			<div class="rating-stars">
+				$Fields.fieldByName('Rating').FieldHolder
+			</div>
+		<% end_if %>
 
 		<% if not $Submitted %>
-			<div class="rating-comment">
-				$Fields.fieldByName('Comments').FieldHolder
-			</div>
+		<div class="rating-comment-wrapper">
+			<% if $IncludeFeedback %>
+				<div class="rating-comment">
+					$Fields.fieldByName('Comments').FieldHolder
+				</div>
+			<% end_if %>
 			<div class="rating-captcha">
 				$Fields.fieldByName('Captcha').FieldHolder
-			<div class="rating-captcha">
+			</div>
+			<% if $Actions && not $Submitted %>
+				<div class="Actions">
+					<% loop $Actions %>
+						$Field
+					<% end_loop %>
+				</div>
+			<% end_if %>
+		</div>
 		<% else %>
 			<% if $SubmittedComments %>
 				<div class="rating-comment rating-comment--submitted">
@@ -35,14 +48,7 @@
 
 		<div class="clear"><!-- --></div>
 	</fieldset>
-
-	<% if $Actions && not $Submitted %>
-	<div class="Actions">
-		<% loop $Actions %>
-			$Field
-		<% end_loop %>
-	</div>
-	<% end_if %>
+	
 <% if $IncludeFormTag %>
 </form>
 <% end_if %>

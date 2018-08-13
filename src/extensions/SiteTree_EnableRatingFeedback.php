@@ -72,4 +72,16 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 	{
 		return ($this->owner->RatingBlockSuccess) ? $this->owner->RatingBlockSuccess : SiteConfig::current_site_config()->DefaultRatingBlockSuccess;
 	}
+
+	/**
+	* To set a data-attibute on the form
+	* for javascript function
+	*/
+	public function getRatingType()
+	{
+		$filter = URLSegmentFilter::create();
+		$t = $filter->filter($this->owner->EnableRatingFeedback);
+
+		return $t;
+	}
 }

@@ -17,6 +17,10 @@ ContentController:
   extensions:
     - Controller_HandleRatingFeedback
 
+Controller_HandleRatingFeedback:
+  default_js_script: jquery
+  default_css_script: interaction
+
 RatingFeedbackManager:
   extensions:
     - SubsiteAdminExtension

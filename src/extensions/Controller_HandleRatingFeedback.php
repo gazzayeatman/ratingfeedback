@@ -6,6 +6,33 @@ class Controller_HandleRatingFeedback extends Extension {
 		'RatingFeedbackForm'
 	];
 
+	public function onBeforeInit()
+	{
+		// Require the necessary javascript
+		$default_js_script = Config::inst()->get('Controller_HandleRatingFeedback', 'default_js_script');
+
+		if ($default_js_script 
+			&& filter_var($default_js_script, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]) !== false) 
+		{
+			$path = sprintf('%s/javascript/ratingfeedback-%s.src.js',  RATINGFEEDBACK_DIR, $default_js_script);
+			if (Director::fileExists($path)) {
+				Requirements::javascript($path);
+			}			
+		}
+
+		// Require necessary css
+		$default_css_script = Config::inst()->get('Controller_HandleRatingFeedback', 'default_css_script');
+
+		if ($default_css_script 
+			&& filter_var($default_css_script, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]) !== false) 
+		{
+			$path = sprintf('%s/css/ratingfeedback-%s.css',  RATINGFEEDBACK_DIR, $default_css_script);
+			if (Director::fileExists($path)) {
+				Requirements::css($path);
+			}			
+		}
+	}
+
 	public function RatingFeedbackForm()
 	{
 		// Config
@@ -31,6 +58,7 @@ class Controller_HandleRatingFeedback extends Extension {
 			$stars[$i] = sprintf('%s star%s', $i, ($i > 1) ? 's' : '');
 		}
 		$options = OptionsetField::create('Rating', 'Rate this', $stars)->addExtraClass('ratingfeedback_stars');
+		$options->setTemplate('StarRatingField');
 
 		// Include field if needed
 		if ($this->owner->data()->includeRating()) {			
@@ -50,7 +78,8 @@ class Controller_HandleRatingFeedback extends Extension {
 
 		$form = new Form($this->owner, __FUNCTION__, $fields, $actions, $required);
 
-		$form->addExtraClass('ratingfeedback_form');
+		$form->addExtraClass('ratingfeedback-form');
+		$form->setAttribute('data-rating-type', $this->owner->data()->getRatingType());
 		$form->legend = 'Rating/Feedback form';
 		$form->disableSecurityToken();
 		$form->setFormMethod('POST');
@@ -59,6 +88,7 @@ class Controller_HandleRatingFeedback extends Extension {
 			
 			if ($rating->PageID === $this->owner->ID) {
 				$submitted = true;
+				$form->addExtraClass('submitted');
 
 				$form->loadDataFrom($rating)
 				->addExtraClass('disabled')
@@ -81,7 +111,9 @@ class Controller_HandleRatingFeedback extends Extension {
 			'Submitted' => $submitted,
 			'SubmittedComments' => $submittedComments,
 			'Title' => ($submitted) ? '' : $title,
-			'Intro' => ($submitted) ? $this->owner->data()->getBlockSuccess() : $this->owner->data()->getBlockIntro()
+			'Intro' => ($submitted) ? $this->owner->data()->getBlockSuccess() : $this->owner->data()->getBlockIntro(),
+			'IncludeRating' => $this->owner->data()->includeRating(),
+			'IncludeFeedback' => $this->owner->data()->includeFeedback()
 		));
 
 		return $form
