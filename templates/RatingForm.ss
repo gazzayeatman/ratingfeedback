@@ -37,6 +37,8 @@
 					</div>
 				<% end_if %>
 
+				$HiddenFields
+
 				<% if $Actions %>
 					<div class="Actions">
 						<% loop $Actions %>

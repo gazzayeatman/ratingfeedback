@@ -86,10 +86,8 @@ class Controller_HandleRatingFeedback extends Extension {
 
 		// If form is submitted
 		if($rating = Session::get('RatingBlock'. $this->owner->ID)) {
-
-			Session::clear('RatingBlock'. $this->owner->ID);
 			
-			if ($rating->PageID === $this->owner->ID) {
+			if ((int) $rating->PageID === $this->owner->ID) {
 				$submitted = true;
 				$form->addExtraClass('submitted');
 
@@ -133,7 +131,6 @@ class Controller_HandleRatingFeedback extends Extension {
 	{
 		$rating = new RatingFeedback();
 		$form->saveInto($rating);
-		$rating->PageID = $this->owner->ID;
 		$rating->write();
 
 		Session::set('RatingBlock'. $this->owner->ID, $rating);
