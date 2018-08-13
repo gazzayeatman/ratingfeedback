@@ -84,4 +84,9 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 
 		return $t;
 	}
+
+	public function getHTMLID()
+	{
+		return sprintf('rating%s', $this->owner->ID);
+	}
 }

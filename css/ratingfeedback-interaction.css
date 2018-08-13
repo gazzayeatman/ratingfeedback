@@ -5,14 +5,23 @@
 * Hide submit button until a star is selected
 */
 
-.ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-comment-wrapper,
-.ratingfeedback-form[data-rating-type="rating-only"]:not(.submitted) .rating-comment-wrapper {
+.ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-comment .middleColumn,
+.ratingfeedback-form[data-rating-type="rating-only"]:not(.submitted) .rating-comment-wrapper.middleColumn,
+.ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-action-wrapper,
+.ratingfeedback-form[data-rating-type="rating-only"]:not(.submitted) .rating-action-wrapper  {
 	max-height: 0;
 	overflow: hidden;
 	transition: max-height 0.5s ease-out;
 }
 
-.ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-comment-wrapper,
-.ratingfeedback-form[data-rating-type="rating-only"].interacted-with:not(.submitted) .rating-comment-wrapper {
+.ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-comment .middleColumn ,
+.ratingfeedback-form[data-rating-type="rating-only"].interacted-with:not(.submitted) .rating-comment .middleColumn,
+.ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-action-wrapper,
+.ratingfeedback-form[data-rating-type="rating-only"].interacted-with:not(.submitted) .rating-action-wrapper {
 	max-height: 600px;
+}
+
+/* Comment label can be interacted with */
+.rating-comment label:hover {
+	cursor: pointer;
 }

@@ -12,7 +12,15 @@
 					form.addClass('interacted-with');
 					inputs.off('change input');
 				});
-			}			
+
+				var commentLabel = form.find('.rating-comment label');
+				if (commentLabel.length > 0) {
+					commentLabel.on('click', function(e) {
+						form.addClass('interacted-with');
+						commentLabel.off('click');
+					});
+				}
+			}
 		}
 
 		init();

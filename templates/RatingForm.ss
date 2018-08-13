@@ -8,36 +8,44 @@
 	<% end_if %>
 
 	<fieldset>
-		<% if $Legend %><legend>$Legend</legend><% end_if %>
-		
-		<h4 class="rating-title">$Title</h4>
-
-		<div class="rating-intro <% if $Submitted %>rating-intro--success<% end_if %>">$Intro</div>
+		<legend class="rating-legend">
+			<h4 class="rating-title">$Title</h4>
+			<% if $Intro %>
+				<span class="rating-intro <% if $Submitted %>rating-intro--success<% end_if %>">$Intro</span>
+			<% end_if %>
+		</legend>		
 
 		<% if $IncludeRating %>
-			<div class="rating-stars">
+			<div class="rating-stars-wrapper">
 				$Fields.fieldByName('Rating').FieldHolder
 			</div>
 		<% end_if %>
 
 		<% if not $Submitted %>
-		<div class="rating-comment-wrapper">
 			<% if $IncludeFeedback %>
+			<div class="rating-comment-wrapper">				
 				<div class="rating-comment">
 					$Fields.fieldByName('Comments').FieldHolder
-				</div>
-			<% end_if %>
-			<div class="rating-captcha">
-				$Fields.fieldByName('Captcha').FieldHolder
+				</div>				
 			</div>
-			<% if $Actions && not $Submitted %>
-				<div class="Actions">
-					<% loop $Actions %>
-						$Field
-					<% end_loop %>
-				</div>
 			<% end_if %>
-		</div>
+			
+			<div class="rating-action-wrapper">
+				<% if $Fields.fieldByName('Captcha') %>
+					<div class="rating-captcha">
+						$Fields.fieldByName('Captcha').FieldHolder
+					</div>
+				<% end_if %>
+
+				<% if $Actions %>
+					<div class="Actions">
+						<% loop $Actions %>
+							$Field
+						<% end_loop %>
+					</div>
+				<% end_if %>
+			</div>
+
 		<% else %>
 			<% if $SubmittedComments %>
 				<div class="rating-comment rating-comment--submitted">

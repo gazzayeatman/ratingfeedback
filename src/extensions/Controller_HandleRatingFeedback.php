@@ -57,7 +57,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		for ($i=1; $i<=$maxstars; $i++) {
 			$stars[$i] = sprintf('%s star%s', $i, ($i > 1) ? 's' : '');
 		}
-		$options = OptionsetField::create('Rating', 'Rate this', $stars)->addExtraClass('ratingfeedback_stars');
+		$options = OptionsetField::create('Rating', 'Rate this', $stars)->addExtraClass('field--starrating');
 		$options->setTemplate('StarRatingField');
 
 		// Include field if needed
@@ -66,7 +66,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		}
 
 		// Build Comment Field
-		$comments = TextareaField::create('Comments', 'Add a comment')->addExtraClass('ratingfeedback_comments');
+		$comments = TextareaField::create('Comments', 'Add a comment')->addExtraClass('field--comment');
 		
 		if ($this->owner->data()->includeFeedback()) {
 			$fields->push($comments);
@@ -80,11 +80,14 @@ class Controller_HandleRatingFeedback extends Extension {
 
 		$form->addExtraClass('ratingfeedback-form');
 		$form->setAttribute('data-rating-type', $this->owner->data()->getRatingType());
-		$form->legend = 'Rating/Feedback form';
+
 		$form->disableSecurityToken();
 		$form->setFormMethod('POST');
 
+		// If form is submitted
 		if($rating = Session::get('RatingBlock'. $this->owner->ID)) {
+
+			Session::clear('RatingBlock'. $this->owner->ID);
 			
 			if ($rating->PageID === $this->owner->ID) {
 				$submitted = true;
@@ -108,6 +111,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		}
 
 		$data = new ArrayData(array(
+			'anchor' => 'rating'.$this->owner->ID,
 			'Submitted' => $submitted,
 			'SubmittedComments' => $submittedComments,
 			'Title' => ($submitted) ? '' : $title,
@@ -118,7 +122,8 @@ class Controller_HandleRatingFeedback extends Extension {
 
 		return $form
 			->customise($data)
-			->setTemplate('forms/RatingForm');
+			->setTemplate('forms/RatingForm')
+			->setHTMLID($this->owner->data()->getHTMLID());
 	}
 
 	/**
@@ -134,7 +139,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		Session::set('RatingBlock'. $this->owner->ID, $rating);
 
 		// Redirect
-		$url = Controller::join_links($this->owner->Link(), '#rating-' . $this->owner->ID);
+		$url = Controller::join_links($this->owner->Link(), '#'.$this->owner->data()->getHTMLID());
 
 		return $this->owner->redirect($url);
 	}
