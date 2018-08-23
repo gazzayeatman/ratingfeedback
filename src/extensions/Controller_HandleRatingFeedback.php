@@ -104,7 +104,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		$form->setRedirectToFormOnValidationError(true);
 
 		// Enable Spam Protection
-		if(!Director::isDev()) {
+		if($this->owner->data()->enableSpamProtection()) {
 			$form->enableSpamProtection();
 		}
 

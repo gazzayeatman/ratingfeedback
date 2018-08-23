@@ -10,7 +10,8 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 		'RatingBlockMaxStars' => 'Int',
 		'RatingBlockTitle' => 'Varchar(255)',
 		'RatingBlockIntro' => 'HTMLText',
-		'RatingBlockSuccess' => 'HTMLText'
+		'RatingBlockSuccess' => 'HTMLText',
+		'RatingBlockSpamProtection' => 'Enum("Default, Enabled, Disabled")'
 	];
 
 	public function updateCMSFields(FieldList $fields)
@@ -28,8 +29,9 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 				->setRightTitle('Default Rating/Feedback Block Intro used if left blank');
 		$success = HTMLEditorField::create('RatingBlockSuccess', 'Rating/Feedback Block Success message')->setRows(3)
 				->setRightTitle('Default Rating/Feedback Block Success Message used if left blank');
+		$spam = OptionsetField::create('RatingBlockSpamProtection', 'Rating/Feedback: Enable Spam Protection', $this->owner->dbObject('RatingBlockSpamProtection')->enumValues(), $this->owner->RatingBlockSpamProtection);
 
-		$fields->addFieldsToTab('Root.Feedback', [$enableFeedback, $maxStar, $title, $intro, $success]);		
+		$fields->addFieldsToTab('Root.Feedback', [$enableFeedback, $maxStar, $title, $intro, $success, $spam]);		
 	}
 
 	/**
@@ -71,6 +73,18 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 	public function getBlockSuccess()
 	{
 		return ($this->owner->RatingBlockSuccess) ? $this->owner->RatingBlockSuccess : SiteConfig::current_site_config()->DefaultRatingBlockSuccess;
+	}
+
+	public function enableSpamProtection()
+	{
+		// If default, fall back on site config
+		if (!$this->owner->RatingBlockSpamProtection || $this->owner->RatingBlockSpamProtection == 'Default') {
+			return SiteConfig::current_site_config()->DefaultRatingBlockSpamProtect;
+		}
+		// Otherwise evaluate value as boolean
+		else {
+			return $this->owner->RatingBlockSpamProtection == 'Enabled';
+		}
 	}
 
 	/**

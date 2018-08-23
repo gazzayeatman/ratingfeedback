@@ -10,7 +10,8 @@ class SiteConfig_RatingFeedbackOptions extends DataExtension {
 		'DefaultRatingBlockMaxStars' => 'Int',
 		'DefaultRatingBlockTitle' => 'Varchar(255)',
 		'DefaultRatingBlockIntro' => 'HTMLText',
-		'DefaultRatingBlockSuccess' => 'HTMLText'
+		'DefaultRatingBlockSuccess' => 'HTMLText',
+		'DefaultRatingBlockSpamProtect' => 'Boolean'
 	];
 
 	public function updateCMSFields(FieldList $fields) 
@@ -26,7 +27,9 @@ class SiteConfig_RatingFeedbackOptions extends DataExtension {
 				->setRows(3),
 			// Success message
 			HTMLEditorField::create('DefaultRatingBlockSuccess', 'Default Rating/Feedback Block Success Message')
-				->setRows(3)
+				->setRows(3),
+			// Spam protection
+			CheckboxField::create('DefaultRatingBlockSpamProtect', 'Rating/Feedback: Enable Spam Protection by default')
 		]);
 	}
 }
