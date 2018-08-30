@@ -17,8 +17,7 @@ class RatingFeedback extends DataObject {
 		'Created' => 'Created',
 		'Page.Title' => 'Title',
 		'Rating' => 'Rating',		
-		'Comments' => 'Comments',
-		'SubmittedBy.Title' => 'Submitted By'	
+		'Comments' => 'Comments'	
 	];
 
 	private static $default_sort = 'Created DESC';
