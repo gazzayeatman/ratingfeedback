@@ -6,12 +6,14 @@
 class SiteTree_EnableRatingFeedback extends DataExtension {
 
 	private static $db = [
-		'EnableRatingFeedback' => "Enum('Disabled, Rating and Feedback, Rating only, Feedback only')",
+		// Override global var
 		'RatingBlockMaxStars' => 'Int',
 		'RatingBlockTitle' => 'Varchar(255)',
 		'RatingBlockIntro' => 'HTMLText',
 		'RatingBlockSuccess' => 'HTMLText',
 		'RatingBlockSpamProtection' => 'Enum("Default, Enabled, Disabled")',
+		// Block level var		
+		'EnableRatingFeedback' => "Enum('Disabled, Rating and Feedback, Rating only, Feedback only')",
 		'HideCommentField' => 'Boolean',
 		'RequireComment' => "Enum('No, Always, If rating is less than')",
 		'RequireCommentIfRatingLessThan' => 'Int'
@@ -21,24 +23,31 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 	{
 		// Display Feedback options
 		$enableFeedback = DropdownField::create('EnableRatingFeedback', 'Feedback/Rating', $this->owner->dbObject('EnableRatingFeedback')->enumValues());
-
-		// Allow to override default content
+		
 		$config = SiteConfig::current_site_config();
+		// Allow to override default max star
 		$maxStar = NumericField::create('RatingBlockMaxStars', 'Rating/Feedback Stars')
 				->setRightTitle('Default Rating/Feedback Stars used if left blank');
+		// Allow to hide comment field by default
 		$hideComment = CheckboxField::create('HideCommentField')
 				->setRightTitle('Hide comment field until a rating as been selected.')
 				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->end();
+		// Require comment field
 		$requireComment = DropdownField::create('RequireComment', 'Require Comment', $this->owner->dbObject('RequireComment')->enumValues())
 				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->end();
+		// Ste the number of star below which the comment field should be required
 		$minRating = NumericField::create('RequireCommentIfRatingLessThan')
 				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->andIf('RequireComment')->isEqualTo('If rating is less than')->end();
+		// Override Title
 		$title = TextField::create('RatingBlockTitle', 'Rating/Feedback Block Title')
 				->setRightTitle('Default Rating/Feedback Block Title used if left blank');
+		// Override Intro
 		$intro = HTMLEditorField::create('RatingBlockIntro', 'Rating/Feedback Block Intro')->setRows(3)
 				->setRightTitle('Default Rating/Feedback Block Intro used if left blank');
+		// Override Success message
 		$success = HTMLEditorField::create('RatingBlockSuccess', 'Rating/Feedback Block Success message')->setRows(3)
 				->setRightTitle('Default Rating/Feedback Block Success Message used if left blank');
+		// Override Spam enable
 		$spam = OptionsetField::create('RatingBlockSpamProtection', 'Rating/Feedback: Enable Spam Protection', $this->owner->dbObject('RatingBlockSpamProtection')->enumValues(), $this->owner->RatingBlockSpamProtection);
 
 		$fields->addFieldsToTab('Root.Feedback', [$enableFeedback, $maxStar, $hideComment, $requireComment, $minRating,  $title, $intro, $success, $spam]);	
@@ -65,11 +74,21 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 		return ($this->owner->EnableRatingFeedback == 'Rating and Feedback' || $this->owner->EnableRatingFeedback == 'Feedback only');
 	}
 
+	/**
+	* Comment is required if it is the ony field
+	* Or if the RequireComment option is tick
+	*/
 	public function isFeedbackRequired()
 	{
 		return ($this->owner->EnableRatingFeedback == 'Feedback only' || ($this->owner->EnableRatingFeedback == 'Rating and Feedback' && $this->owner->RequireComment == 'Always'));
 	}
 
+	/**
+	* Comment field can be required if stars are required
+	* and comment is not required by default
+	* and the minimun star is less than the maximum star
+	* Note: javascript toggles the required attribute
+	*/
 	public function includeRequireFeedbackIfRatingLessThanAttribute()
 	{
 		return ($this->owner->EnableRatingFeedback == 'Rating and Feedback' && $this->owner->RequireComment == 'If rating is less than' && $this->owner->RequireCommentIfRatingLessThan > 0 && $this->owner->getBlockMaxStars() >= $this->owner->RequireCommentIfRatingLessThan);
