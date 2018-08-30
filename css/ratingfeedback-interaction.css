@@ -5,7 +5,7 @@
 * Hide submit button until a star is selected
 */
 
-.ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-comment .middleColumn,
+.ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-comment.rating-comment--hidden .middleColumn,
 .ratingfeedback-form[data-rating-type="rating-only"]:not(.submitted) .rating-comment-wrapper.middleColumn,
 .ratingfeedback-form[data-rating-type="rating-and-feedback"]:not(.submitted) .rating-action-wrapper,
 .ratingfeedback-form[data-rating-type="rating-only"]:not(.submitted) .rating-action-wrapper  {
@@ -14,7 +14,7 @@
 	transition: max-height 0.5s ease-out;
 }
 
-.ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-comment .middleColumn ,
+.ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-comment.rating-comment--hidden .middleColumn ,
 .ratingfeedback-form[data-rating-type="rating-only"].interacted-with:not(.submitted) .rating-comment .middleColumn,
 .ratingfeedback-form[data-rating-type="rating-and-feedback"].interacted-with:not(.submitted) .rating-action-wrapper,
 .ratingfeedback-form[data-rating-type="rating-only"].interacted-with:not(.submitted) .rating-action-wrapper {

@@ -24,7 +24,7 @@
 		<% if not $Submitted %>
 			<% if $IncludeFeedback %>
 			<div class="rating-comment-wrapper">				
-				<div class="rating-comment">
+				<div class="rating-comment <% if $HideFeedback %>rating-comment--hidden<% end_if %>">
 					$Fields.fieldByName('Comments').FieldHolder
 				</div>				
 			</div>

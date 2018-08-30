@@ -70,11 +70,19 @@ class Controller_HandleRatingFeedback extends Extension {
 		
 		if ($this->owner->data()->includeFeedback()) {
 			$fields->push($comments);
+
+			if ($this->owner->data()->includeRequireFeedbackIfRatingLessThanAttribute()) {
+				$comments->setAttribute('data-require-if-less-than', $this->owner->data()->RequireCommentIfRatingLessThan);
+			}
 		}
 
 		// Config Form
 		$actions = new FieldList($action = new FormAction('recordRating', 'Submit'));
 		$required = new RequiredFields('Rating');
+
+		if ($this->owner->data()->isFeedbackRequired()) {
+			$required->addRequiredField('Comments');
+		}
 
 		$form = new Form($this->owner, __FUNCTION__, $fields, $actions, $required);
 
@@ -115,7 +123,8 @@ class Controller_HandleRatingFeedback extends Extension {
 			'Title' => ($submitted) ? '' : $title,
 			'Intro' => ($submitted) ? $this->owner->data()->getBlockSuccess() : $this->owner->data()->getBlockIntro(),
 			'IncludeRating' => $this->owner->data()->includeRating(),
-			'IncludeFeedback' => $this->owner->data()->includeFeedback()
+			'IncludeFeedback' => $this->owner->data()->includeFeedback(),
+			'HideFeedback' => $this->owner->data()->HideCommentField
 		));
 
 		return $form

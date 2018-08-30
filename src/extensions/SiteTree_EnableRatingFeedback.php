@@ -11,7 +11,10 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 		'RatingBlockTitle' => 'Varchar(255)',
 		'RatingBlockIntro' => 'HTMLText',
 		'RatingBlockSuccess' => 'HTMLText',
-		'RatingBlockSpamProtection' => 'Enum("Default, Enabled, Disabled")'
+		'RatingBlockSpamProtection' => 'Enum("Default, Enabled, Disabled")',
+		'HideCommentField' => 'Boolean',
+		'RequireComment' => "Enum('No, Always, If rating is less than')",
+		'RequireCommentIfRatingLessThan' => 'Int'
 	];
 
 	public function updateCMSFields(FieldList $fields)
@@ -23,6 +26,13 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 		$config = SiteConfig::current_site_config();
 		$maxStar = NumericField::create('RatingBlockMaxStars', 'Rating/Feedback Stars')
 				->setRightTitle('Default Rating/Feedback Stars used if left blank');
+		$hideComment = CheckboxField::create('HideCommentField')
+				->setRightTitle('Hide comment field until a rating as been selected.')
+				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->end();
+		$requireComment = DropdownField::create('RequireComment', 'Require Comment', $this->owner->dbObject('RequireComment')->enumValues())
+				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->end();
+		$minRating = NumericField::create('RequireCommentIfRatingLessThan')
+				->displayIf('EnableRatingFeedback')->isEqualTo('Rating and Feedback')->andIf('RequireComment')->isEqualTo('If rating is less than')->end();
 		$title = TextField::create('RatingBlockTitle', 'Rating/Feedback Block Title')
 				->setRightTitle('Default Rating/Feedback Block Title used if left blank');
 		$intro = HTMLEditorField::create('RatingBlockIntro', 'Rating/Feedback Block Intro')->setRows(3)
@@ -31,7 +41,7 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 				->setRightTitle('Default Rating/Feedback Block Success Message used if left blank');
 		$spam = OptionsetField::create('RatingBlockSpamProtection', 'Rating/Feedback: Enable Spam Protection', $this->owner->dbObject('RatingBlockSpamProtection')->enumValues(), $this->owner->RatingBlockSpamProtection);
 
-		$fields->addFieldsToTab('Root.Feedback', [$enableFeedback, $maxStar, $title, $intro, $success, $spam]);		
+		$fields->addFieldsToTab('Root.Feedback', [$enableFeedback, $maxStar, $hideComment, $requireComment, $minRating,  $title, $intro, $success, $spam]);	
 	}
 
 	/**
@@ -53,6 +63,16 @@ class SiteTree_EnableRatingFeedback extends DataExtension {
 	public function includeFeedback()
 	{
 		return ($this->owner->EnableRatingFeedback == 'Rating and Feedback' || $this->owner->EnableRatingFeedback == 'Feedback only');
+	}
+
+	public function isFeedbackRequired()
+	{
+		return ($this->owner->EnableRatingFeedback == 'Feedback only' || ($this->owner->EnableRatingFeedback == 'Rating and Feedback' && $this->owner->RequireComment == 'Always'));
+	}
+
+	public function includeRequireFeedbackIfRatingLessThanAttribute()
+	{
+		return ($this->owner->EnableRatingFeedback == 'Rating and Feedback' && $this->owner->RequireComment == 'If rating is less than' && $this->owner->RequireCommentIfRatingLessThan > 0 && $this->owner->getBlockMaxStars() >= $this->owner->RequireCommentIfRatingLessThan);
 	}
 
 	public function getBlockMaxStars()
