@@ -1,30 +1,31 @@
 ---
 Name: ratingfeedbacconfig
-After:
-  - 'framework/*'
-  - 'cms/*'
 ---
 
-SiteConfig:
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - SiteConfig_RatingFeedbackOptions
+    - DNADesign\RatingFeedback\Extensions\SiteConfigRatingFeedbackOptions
 
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - SiteTree_EnableRatingFeedback
+    - DNADesign\RatingFeedback\Extensions\SiteTreeEnableRatingFeedback
 
-ContentController:
+SilverStripe\CMS\Controllers\ContentController:
   extensions:
-    - Controller_HandleRatingFeedback
+    - DNADesign\RatingFeedback\Extensions\ControllerHandleRatingFeedback
 
-Controller_HandleRatingFeedback:
+DNADesign\RatingFeedback\Extensions\ControllerHandleRatingFeedback:
   default_js_script: jquery
   default_css_script: interaction
 
-RatingFeedbackManager:
-  extensions:
-    - SubsiteAdminExtension
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'dnadesign/ratingfeedback:javascript/ratingfeedback-jquery.src.js'
 
-RatingFeedback:
+DNADesign\RatingFeedback\RatingFeedbackManager:
   extensions:
-    - SubsiteModelExtension
+    - Adrexia\SubsiteModelAdmins\SubsiteAdminExtension
+
+DNADesign\RatingFeedback\Models\RatingFeedback:
+  extensions:
+   - Adrexia\SubsiteModelAdmins\SubsiteModelExtension

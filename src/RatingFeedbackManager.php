@@ -1,9 +1,18 @@
 <?php
 
+namespace DNADesign\RatingFeedback;
+
+use DateTime;
+use DateInterval;
+use SilverStripe\Forms\DateField;
+use SilverStripe\Admin\ModelAdmin;
+use DNADesign\RatingFeedback\Models\RatingFeedback;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+
 class RatingFeedbackManager extends ModelAdmin {
 	
 	private static $managed_models = [
-		'RatingFeedback'
+		RatingFeedback::class
 	];
 
 	private static $menu_title = 'Feedback Manager';
@@ -12,15 +21,16 @@ class RatingFeedbackManager extends ModelAdmin {
 	
 	private static $menu_priority = -8;
 
-	private static $menu_icon = 'framework/admin/images/menu-icons/16x16/blog.png';
+	// private static $menu_icon = 'framework/admin/images/menu-icons/16x16/blog.png';
 
 	public function getEditForm($id = null, $fields = null) 
 	{
 		$form = parent::getEditForm($id , $fields);
-		$field = $form->Fields()->fieldByName($this->modelClass);
+		$field = $form->Fields()->dataFieldByName($this->sanitiseClassName(RatingFeedback::class));
+
 		$config = $field->getConfig();
 
-		$paginator = $config->getComponentByType('GridFieldPaginator');
+		$paginator = $config->getComponentByType(GridFieldPaginator::class);
 		$paginator->setItemsPerPage(500);
 		
 		return $form;

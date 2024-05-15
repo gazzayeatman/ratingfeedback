@@ -1,10 +1,19 @@
 <?php
 
+namespace DNADesign\RatingFeedback\Extensions;
+
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+
 /**
 * This extensions provides the necessary interface to
 * configure the RatingFeedback block
 */
-class SiteConfig_RatingFeedbackOptions extends DataExtension {
+class SiteConfigRatingFeedbackOptions extends DataExtension {
 
 	private static $db = [
 		'DefaultRatingBlockMaxStars' => 'Int',

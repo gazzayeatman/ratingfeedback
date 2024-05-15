@@ -1,6 +1,6 @@
 {
 	"name": "dnadesign/ratingfeedback",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"description": "Display a feedback form on any page",
 	"license": "BSD-3-Clause",
 	"keywords": ["silverstripe", "cms", "feedback", "rating", "stars"],
@@ -10,10 +10,23 @@
 			"email": "dev@dna.co.nz"
 		}
 	],
+	"repositories": [
+		{
+            "type": "vcs",
+            "url": "git@github.com:izzudin96/silverstripe-subsite-modeladmins.git"
+        }
+	],
 	"require": {
-		"silverstripe/framework": "~3.2"
+		"silverstripe/framework": "^4 || ^5",
+		"silverstripe/cms": "^4 || ^5",
+		"silverstripe/admin": "^2.2",
+		"silverstripe/siteconfig": "^5.2",
+		"adrexia/subsite-modeladmins": "dev-master"
 	},
-	"suggests": {
-		"dnadesign/gridfield-bulk-delete": "Allows for bulk deletion of feedback submissions"
+	"config": {
+		"allow-plugins": {
+			"composer/installers": false,
+			"silverstripe/vendor-plugin": false
+		}
 	}
 }

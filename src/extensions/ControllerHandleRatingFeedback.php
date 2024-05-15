@@ -1,6 +1,26 @@
 <?php
 
-class Controller_HandleRatingFeedback extends Extension {
+namespace DNADesign\RatingFeedback\Extensions;
+
+use SilverStripe\Forms\Form;
+use SilverStripe\Core\Extension;
+use SilverStripe\View\ArrayData;
+use SilverStripe\Control\Session;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Control\Director;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Security\Security;
+use SilverStripe\View\Requirements;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\DisabledTransformation;
+use DNADesign\RatingFeedback\Models\RatingFeedback;
+
+class ControllerHandleRatingFeedback extends Extension {
 
 	private static $allowed_actions = [
 		'RatingFeedbackForm'
@@ -9,7 +29,7 @@ class Controller_HandleRatingFeedback extends Extension {
 	public function onBeforeInit()
 	{
 		// Require the necessary javascript
-		$default_js_script = Config::inst()->get('Controller_HandleRatingFeedback', 'default_js_script');
+		$default_js_script = Config::inst()->get(ControllerHandleRatingFeedback::class, 'default_js_script');
 
 		if ($default_js_script 
 			&& filter_var($default_js_script, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]) !== false) 
@@ -17,11 +37,11 @@ class Controller_HandleRatingFeedback extends Extension {
 			$path = sprintf('%s/javascript/ratingfeedback-%s.src.js',  RATINGFEEDBACK_DIR, $default_js_script);
 			if (Director::fileExists($path)) {
 				Requirements::javascript($path);
-			}			
+			}
 		}
 
 		// Require necessary css
-		$default_css_script = Config::inst()->get('Controller_HandleRatingFeedback', 'default_css_script');
+		$default_css_script = Config::inst()->get('ControllerHandleRatingFeedback', 'default_css_script');
 
 		if ($default_css_script 
 			&& filter_var($default_css_script, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]) !== false) 
@@ -49,7 +69,7 @@ class Controller_HandleRatingFeedback extends Extension {
 		// And currentUserID if logged in
 		$fields = new FieldList([
 			HiddenField::create('PageID', '', $this->owner->ID),
-			HiddenField::create('SubmittedByID', '', Member::currentUserID())
+			HiddenField::create('SubmittedByID', '', Security::getCurrentUser())
 		]);
 
 		// Build Star Rating Field
