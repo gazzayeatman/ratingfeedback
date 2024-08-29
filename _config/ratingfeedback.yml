@@ -20,10 +20,6 @@ DNADesign\RatingFeedback\Extensions\ControllerHandleRatingFeedback:
 
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
-    - 'dnadesign/ratingfeedback:javascript/ratingfeedback-jquery.src.js'
-
-SilverStripe\Admin\LeftAndMain:
-  extra_requirements_javascript:
     - 'dnadesign/ratingfeedback: javascript/ratingfeedback-jquery.src.js'
 
 DNADesign\RatingFeedback\RatingFeedbackManager:
