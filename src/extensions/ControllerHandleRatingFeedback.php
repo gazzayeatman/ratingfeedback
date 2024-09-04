@@ -34,7 +34,7 @@ class ControllerHandleRatingFeedback extends Extension {
 		if ($default_js_script 
 			&& filter_var($default_js_script, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]) !== false) 
 		{
-			$path = sprintf('%s/javascript/ratingfeedback-%s.src.js',  RATINGFEEDBACK_DIR, $default_js_script);
+			$path = sprintf('%s/js/ratingfeedback-%s.src.js',  RATINGFEEDBACK_DIR, $default_js_script);
 			if (Director::fileExists($path)) {
 				Requirements::javascript($path);
 			}
