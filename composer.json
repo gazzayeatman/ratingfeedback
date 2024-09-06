@@ -23,6 +23,12 @@
 		"silverstripe/siteconfig": "^5.2",
 		"adrexia/subsite-modeladmins": "dev-master"
 	},
+	"extra": {
+		"expose": [
+			"js",
+			"css"
+		]
+	},
 	"config": {
 		"allow-plugins": {
 			"composer/installers": false,
